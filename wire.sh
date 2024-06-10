@@ -199,10 +199,10 @@ systemctl is-active "wg-quick@wg0"
 
 # Tambahan
 cd /usr/bin
-wget -O add-wg "http://firenetvpn.net/files/repo/wg/add-wg.sh"
-wget -O del-wg "http://firenetvpn.net/files/repo/wg/del-wg.sh"
-wget -O cek-wg "http://firenetvpn.net/files/repo/wg/cek-wg.sh"
-wget -O renew-wg "http://firenetvpn.net/files/repo/wg/renew-wg.sh"
+wget -O add-wg "http://hikevpn.live/files/repo/wg/add-wg.sh"
+wget -O del-wg "http://hikevpn.live/files/repo/wg/del-wg.sh"
+wget -O cek-wg "http://hikevpn.live/files/repo/wg/cek-wg.sh"
+wget -O renew-wg "http://hikevpn.live/files/repo/wg/renew-wg.sh"
 chmod +x add-wg
 chmod +x del-wg
 chmod +x cek-wg
