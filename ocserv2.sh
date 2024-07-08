@@ -375,4 +375,3 @@ sudo /etc/init.d/freeradius restart
 rm -rf /root/ocserv
 rm -rf /root/*
 reboot
-
