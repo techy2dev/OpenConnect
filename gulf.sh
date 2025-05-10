@@ -1,5 +1,7 @@
 #!/bin/bash
-
+set -x  # Enable debugging
+exec > >(tee -a /tmp/ocserv.log) 2>&1
+date +"=== Script started at %Y-%m-%d %H:%M:%S ==="
 cd
 apt update -y
 apt-get upgrade -y
