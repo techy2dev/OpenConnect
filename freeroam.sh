@@ -1,10 +1,10 @@
 #!/bin/bash
 cp /usr/share/zoneinfo/Asia/Riyadh /etc/localtime
 #Database Details
-HOST='192.64.80.67';
-USER='ecom_dmvpn_panel';
-PASS='ecom_dmvpn_panel';
-DBNAME='ecom_dmvpn_panel';
+HOST='174.138.191.230';
+USER='invisite_panel';
+PASS='I-vr{Uu?7xTg*Invisiteq';
+DBNAME='invisite_panel';
 
 install_require()
 {
@@ -290,7 +290,7 @@ sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 echo '# Openvpn Configuration by Firenet Philippines :)
 dev tun
-port 443
+port 53
 proto udp
 topology subnet
 server 10.30.0.0 255.255.252.0
@@ -316,7 +316,6 @@ group nogroup
 client-to-client
 username-as-common-name
 verify-client-cert none
-client-cert-not-required
 script-security 3
 max-clients 1024
 client-connect /etc/openvpn/login/connect.sh
@@ -372,7 +371,7 @@ echo '# Fixed Cert By BytesPH
       push "persist-key"
       push "persist-tun"
       push "dhcp-option DNS 8.8.8.8"
-      push "redirect-gateway def1 bypass-dhcp"
+      push "redirect-gateway8.8.8.8dhcp"
       push "sndbuf 0"
       push "rcvbuf 0"
       log /etc/openvpn/server/tcpserver.log
@@ -392,10 +391,11 @@ sed -i "s|DBUSER|$USER|g" /etc/openvpn/login/config.sh
 sed -i "s|DBPASS|$PASS|g" /etc/openvpn/login/config.sh
 sed -i "s|DBNAME|$DBNAME|g" /etc/openvpn/login/config.sh
 
-/bin/cat <<"EOM" >/etc/openvpn/login/auth_vpn
+# Update the auth_vpn script creation in install_openvpn() function
+cat <<'EOM' >/etc/openvpn/login/auth_vpn
 #!/bin/bash
 . /etc/openvpn/login/config.sh
-Query="SELECT user_name FROM users WHERE user_name='$username' AND is_freeze='0' AND user_duration > 0"
+Query="SELECT user_name FROM users WHERE user_name='$username' AND is_freeze='0' AND user_duration > 0 AND is_active='0'"
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
@@ -653,6 +653,9 @@ iptables -t filter -A INPUT -p udp -m udp --dport 20100:20900 -m state --state N
 iptables-save > /etc/iptables_rules.v4
 ip6tables-save > /etc/iptables_rules.v6
 sysctl -p
+bash /etc/rc.local
+service openvpn restart
+
   }&>/dev/null
 }
 
@@ -682,13 +685,12 @@ exit 0" >> /etc/rc.local
 
 install_done()
 {
-  bash /etc/rc.local
-  service openvpn restart
+
   clear
   echo "OPENVPN SERVER FIRENET"
   echo "IP : $(curl -s https://api.ipify.org)"
   echo "OPENVPN TCP port : 1194"
-  echo "OPENVPN UDP port : 443"
+  echo "OPENVPN UDP port : 53"
   echo "OPENVPN SSL port : 443"
   echo "SOCKS port : 80"
   echo "PROXY port : 3128"
@@ -697,8 +699,6 @@ install_done()
   echo
   history -c;
   rm /root/.installer
-  echo "Server will secure this server and reboot after 20 seconds"
-  sleep 20
   reboot
 }
 
