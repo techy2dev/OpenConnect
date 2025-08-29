@@ -1,7 +1,7 @@
 #!/bin/bash
 cp /usr/share/zoneinfo/Asia/Riyadh /etc/localtime
 #Database Details
-HOST='82.25.96.207';
+HOST='92.113.22.127';
 USER='u672427164_vlpvvs';
 PASS='wcsMc30rcg';
 DBNAME='u672427164_vlpvvs';
