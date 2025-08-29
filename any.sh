@@ -319,9 +319,9 @@ verify-client-cert none
 client-cert-not-required
 script-security 3
 max-clients 1024
-client-connect /etc/openvpn/login/connect.sh
-client-disconnect /etc/openvpn/login/disconnect.sh
-ifconfig-pool-persist /etc/openvpn/server/ip_udp.txt
+#client-connect /etc/openvpn/login/connect.sh
+#client-disconnect /etc/openvpn/login/disconnect.sh
+#ifconfig-pool-persist /etc/openvpn/server/ip_udp.txt
 auth-user-pass-verify "/etc/openvpn/login/auth_vpn" via-env # 
 push "persist-key"
 push "persist-tun"
@@ -365,9 +365,9 @@ echo '# Fixed Cert By BytesPH
       client-cert-not-required
       script-security 2
       max-clients 1024
-      client-connect /etc/openvpn/login/connect.sh
-      client-disconnect /etc/openvpn/login/disconnect.sh
-      ifconfig-pool-persist /etc/openvpn/server/ip_tcp.txt
+      #client-connect /etc/openvpn/login/connect.sh
+      #client-disconnect /etc/openvpn/login/disconnect.sh
+      #ifconfig-pool-persist /etc/openvpn/server/ip_tcp.txt
       auth-user-pass-verify "/etc/openvpn/login/auth_vpn" via-env #
       push "persist-key"
       push "persist-tun"
@@ -394,10 +394,10 @@ sed -i "s|DBNAME|$DBNAME|g" /etc/openvpn/login/config.sh
 
 /bin/cat <<"EOM" >/etc/openvpn/login/auth_vpn
 #!/bin/bash
-. /etc/openvpn/login/config.sh
+#. /etc/openvpn/login/config.sh
 #Query="SELECT user_name FROM users WHERE user_name='$username' AND is_freeze='0' AND user_duration > 0"
 #user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
-[ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
+#[ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
 
 #client-connect file
