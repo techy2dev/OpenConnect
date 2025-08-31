@@ -288,7 +288,8 @@ echo 'DNS=1.1.1.1
 DNSStubListener=no' >> /etc/systemd/resolved.conf
 sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
-echo '# Openvpn Configuration by Firenet Philippines :)
+echo '# Openvpn Configuration by techydev :)
+duplicate-cn
 dev tun
 port 443
 proto udp
@@ -333,8 +334,9 @@ log /etc/openvpn/server/udpserver.log
 status /etc/openvpn/server/udpclient.log
 verb 3' > /etc/openvpn/server.conf
 
-echo '# Fixed Cert By BytesPH
+echo '# Fixed Cert By techydev
       # Openvpn Configuration by Firenet Philippines :)
+	  duplicate-cn
       dev tun
       port 1194
       proto tcp
