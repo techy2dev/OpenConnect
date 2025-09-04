@@ -383,10 +383,11 @@ echo '# Fixed Cert By techydev
 
 cat <<\EOM >/etc/openvpn/login/config.sh
 #!/bin/bash
-HOST='DBHOST'
-USER='DBUSER'
-PASS='DBPASS'
-DB='DBNAME'
+# config.sh - VPN server config
+
+AUTH_URL="https://panel.onebesthost.com/database/api/auth.php"       # authentication
+CONNECT_URL="https://panel.onebesthost.com/database/api/connect.php" # user connect tracking
+DISCONNECT_URL="https://panel.onebesthost.com/database/api/disconnect.php" # user disconnect tracking
 EOM
 
 sed -i "s|DBHOST|$HOST|g" /etc/openvpn/login/config.sh
@@ -397,30 +398,40 @@ sed -i "s|DBNAME|$DBNAME|g" /etc/openvpn/login/config.sh
 /bin/cat <<"EOM" >/etc/openvpn/login/auth_vpn
 #!/bin/bash
 . /etc/openvpn/login/config.sh
-Query="SELECT user_name FROM users WHERE user_name='$username' AND is_freeze='0' AND user_duration > 0"
-user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
-[ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
+
+# Send username and optional password to PHP auth
+RESPONSE=$(curl -s -d "username=$username" "$AUTH_URL")
+
+if [ "$RESPONSE" = "ok" ]; then
+    exit 0   # success
+else
+    exit 1   # fail
+fi
+
 EOM
 
 #client-connect file
 cat <<'LENZ05' >/etc/openvpn/login/connect.sh
 #!/bin/bash
-
 . /etc/openvpn/login/config.sh
 
-##set status online to user connected
-server_ip=$(curl -s https://api.ipify.org)
-datenow=`date +"%Y-%m-%d %T"`
-mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_active='1', device_connected='1', active_address='$server_ip', active_date='$datenow' WHERE user_name='$common_name' "
+USERNAME="$common_name"
+SERVER_IP=$(curl -s https://api.ipify.org)
+DATENOW=$(date +"%Y-%m-%d %T")
+
+# Send user online status to PHP
+curl -s -d "username=$USERNAME&server_ip=$SERVER_IP&active_date=$DATENOW" "$CONNECT_URL"
 LENZ05
 
 #TCP client-disconnect file
 cat <<'LENZ06' >/etc/openvpn/login/disconnect.sh
 #!/bin/bash
-
 . /etc/openvpn/login/config.sh
 
-mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_active='0', active_address='', active_date='' WHERE user_name='$common_name' "
+USERNAME="$common_name"
+
+# Send user offline status to PHP
+curl -s -d "username=$USERNAME" "$DISCONNECT_URL"
 LENZ06
 
 cat << EOF > /etc/openvpn/easy-rsa/keys/ca.crt
