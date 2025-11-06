@@ -385,9 +385,9 @@ cat <<\EOM >/etc/openvpn/login/config.sh
 #!/bin/bash
 # config.sh - VPN server config
 
-AUTH_URL="https://panel.shrkvpn.co/database/api/auth.php"       # authentication
-CONNECT_URL="https://panel.shrkvpn.co/database/api/connect.php" # user connect tracking
-DISCONNECT_URL="https://panel.shrkvpn.co/database/api/disconnect.php" # user disconnect tracking
+AUTH_URL="https://panel.sharkvpn.co/database/api/auth.php"       # authentication
+CONNECT_URL="https://panel.sharkvpn.co/database/api/connect.php" # user connect tracking
+DISCONNECT_URL="https://panel.sharkvpn.co/database/api/disconnect.php" # user disconnect tracking
 EOM
 
 sed -i "s|DBHOST|$HOST|g" /etc/openvpn/login/config.sh
