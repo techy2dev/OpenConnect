@@ -91,7 +91,7 @@ cat <<"EOM" >/temp/auth.sh
 USERNAME=$1
 PASS=$2
 
-data=$(curl -sb -x POST  -F "username=$USERNAME" -F "password=$PASS" "https://bslapp.online/login/authe.php")
+data=$(curl -sb -x POST  -F "username=$USERNAME" -F "password=$PASS" "https://bslapps.online/login/authe.php")
 echo $data
 
 EOM
